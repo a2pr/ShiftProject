@@ -1,0 +1,29 @@
+<div fxLayout="column" class="container">
+  <div fxFlex></div>
+  <div fxFlex fxFlexAlign="center">
+    <mat-card class="form-size">
+      <mat-card-content>
+        <mat-card-title>
+         <h1> Services Order</h1>
+        </mat-card-title>
+        <mat-card-content>
+          <form action="">
+            <h2>Patience</h2>
+            <mat-divider></mat-divider>
+            <p>
+              <mat-form-field class="half-width">
+                  <input matInput placeholder="Pacient">
+              </mat-form-field>    
+              <mat-form-field class="half-width">
+                  <input matInput [matDatepicker]="picker" placeholder="Choose a date">
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker touchUi="true" #picker></mat-datepicker>
+              </mat-form-field>
+            </p>
+          </form>
+        </mat-card-content>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div fxFlex></div>
+</div>
