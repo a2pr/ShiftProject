@@ -11,13 +11,15 @@ import { HomeComponent } from './home/home.component';
 import { RegistrationComponent } from './registration/registration.component';
 import {FormsModule} from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { EndComponent } from './end/end.component';
 //Services
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    EndComponent
   ],
   imports: [
     BrowserModule,
