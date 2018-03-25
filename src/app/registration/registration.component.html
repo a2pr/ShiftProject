@@ -1,42 +1,67 @@
 <div fxLayout="column" class="container">
   <div fxFlex></div>
-  <div fxFlex fxFlexAlign="center">
-    <mat-card class="form-size">
+  
+    <mat-card fxFlex fxFlexAlign="center" class="form-size">
       
         <mat-card-title>
          <h2> Services Order</h2>
         </mat-card-title>
         <mat-card-content>
-          <form action="">
+          <form [formGroup]='orderServiceForm' (ngSubmit)="onSubmit()" >
             <h3>Pacient</h3>
             <mat-divider></mat-divider>
             <p>
-              <mat-form-field class="half-width">
-                  <input matInput placeholder="Pacient">
+              <mat-form-field class="half-width" >
+                  <input matInput formControlName="pacient" placeholder="Pacient name">
+                  <mat-hint>
+                    <span [hidden]="!(orderServiceForm.get('pacient').hasError('required') && orderServiceForm.get('pacient').touched)">
+                        The name of the Pacient is required
+                    </span>
+                  </mat-hint>
               </mat-form-field>    
               <mat-form-field class="half-width">
-                  <input matInput [matDatepicker]="picker" placeholder="Choose a date">
+                  <input matInput formControlName="birthday" [matDatepicker]="picker" placeholder="Choose a date">
                   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker touchUi="true" #picker></mat-datepicker>
+                  <mat-hint>
+                      <span [hidden]="!(orderServiceForm.get('birthday').hasError('required') && orderServiceForm.get('birthday').touched)">
+                          The birthday of the Pacient is required
+                      </span>
+                  </mat-hint>
+                  
               </mat-form-field>
               <mat-form-field class="half-width">
-                <mat-select placeholder="Gender">
+                <mat-select formControlName="gender" placeholder="Gender">
                   <mat-option value="male">Male</mat-option>
                   <mat-option value="female">Female</mat-option>
                 </mat-select>
+                <span [hidden]="!(orderServiceForm.get('gender').hasError('required') && orderServiceForm.get('gender').touched)">
+                    The gender of the Pacient is required
+                </span>
               </mat-form-field>
               <mat-form-field class="half-width">
                 <!-- This will fill with a service -->
-                <mat-select placeholder="City">
+                <mat-select formControlName="cityFromPacient" placeholder="City">
                   <mat-option value="cityA">A City</mat-option>
                   <mat-option value="cityB">B City</mat-option>
                   <mat-option value="cityC">C City</mat-option>
                   <mat-option value="cityD">D City</mat-option>
                 </mat-select>
+                <mat-hint>
+                    <span [hidden]="!(orderServiceForm.get('cityFromPacient').hasError('required') && orderServiceForm.get('cityFromPacient').touched)">
+                        The city of residence of the Pacient is required
+                    </span>
+                </mat-hint>
+               
                 <!--  -->
               </mat-form-field>
               <mat-form-field class="full-width">
-                <textarea  matInput placeholder="Address" cols="5" rows="5"></textarea>
+                <textarea  formControlName="address" matInput placeholder="Address" cols="5" rows="5"></textarea>
+                <mat-hint>
+                    <span [hidden]="!(orderServiceForm.get('address').hasError('required') && orderServiceForm.get('address').touched)">
+                        The address of the Pacient is required
+                    </span>
+                </mat-hint>
               </mat-form-field>
               </p>
               <h3>Services require</h3>
@@ -44,50 +69,91 @@
               <p>
               <!-- This will fill with a service -->
               <mat-form-field class="half-width">
-                <mat-select placeholder="Exam">
+                <mat-select formControlName="exam" placeholder="Exam" [disabled]="orderServiceForm.get('pacient').hasError('required') 
+                || orderServiceForm.get('birthday').hasError('required') || orderServiceForm.get('gender').hasError('required') ||
+                orderServiceForm.get('cityFromPacient').hasError('required') || orderServiceForm.get('address').hasError('required')">
                   <mat-option value="ExamA">Exam A</mat-option>
                   <mat-option value="ExamB">Exam B</mat-option>
                   <mat-option value="ExamC">Exam C</mat-option>
                   <mat-option value="ExamD">Exam D</mat-option>
                 </mat-select>
+                <mat-hint>
+                    <span [hidden]="!(orderServiceForm.get('exam').hasError('required') && orderServiceForm.get('exam').touched)">
+                        The exam apply for Pacient is required
+                    </span>
+                </mat-hint>
               </mat-form-field>
               <mat-form-field class="half-width">
-                <mat-select placeholder="Insurance Company">
+                <mat-select formControlName="insurance" placeholder="Insurance Company" 
+                [disabled]="orderServiceForm.get('exam').hasError('required')">
                   <mat-option value="companyA">Company A</mat-option>
                   <mat-option value="companyB">Company B</mat-option>
                   <mat-option value="companyC">Company C</mat-option>
                   <mat-option value="companyD">Company D</mat-option>
                 </mat-select>
+                <mat-hint>
+                    <span [hidden]="!(orderServiceForm.get('insurance').hasError('required') && orderServiceForm.get('insurance').touched)">
+                        The insurance company of Pacient is required
+                    </span>
+                </mat-hint>
               </mat-form-field>
               <mat-form-field class="half-width">
-                <mat-select placeholder="Applying lab">
+                  <mat-select formControlName="cityFromLab" placeholder="City" 
+                  [disabled]="orderServiceForm.get('insurance').hasError('required')">
+                    <mat-option value="cityA">A City</mat-option>
+                    <mat-option value="cityB">B City</mat-option>
+                    <mat-option value="cityC">C City</mat-option>
+                    <mat-option value="cityD">D City</mat-option>
+                  </mat-select>
+                  <mat-hint>
+                      <span [hidden]="!(orderServiceForm.get('cityFromLab').hasError('required') && orderServiceForm.get('cityFromLab').touched)">
+                          The city of the lab is required
+                      </span>
+                  </mat-hint>
+                </mat-form-field>
+              <mat-form-field class="half-width">
+                <mat-select formControlName="lab" placeholder="Applying lab"
+                [disabled]="orderServiceForm.get('cityFromLab').hasError('required')">
                   <mat-option value="labA">A lab</mat-option>
                   <mat-option value="labB">B lab</mat-option>
                   <mat-option value="labC">C lab</mat-option>
                   <mat-option value="labD">D lab</mat-option>
                 </mat-select>
+                <mat-hint>
+                    <span [hidden]="!(orderServiceForm.get('lab').hasError('required') && orderServiceForm.get('lab').touched)">
+                        The lab where the Pacient is gonna be treated is required
+                    </span>
+                </mat-hint>
               </mat-form-field>
+              
               <mat-form-field class="half-width">
-                <mat-select placeholder="City">
-                  <mat-option value="cityA">A City</mat-option>
-                  <mat-option value="cityB">B City</mat-option>
-                  <mat-option value="cityC">C City</mat-option>
-                  <mat-option value="cityD">D City</mat-option>
-                </mat-select>
-              </mat-form-field>   
+                  <mat-select formControlName="medic" placeholder="Medic" 
+                  [disabled]="orderServiceForm.get('lab').hasError('required')">
+                    <mat-option value="medicA">A Medic</mat-option>
+                    <mat-option value="medicB">B Medic</mat-option>
+                    <mat-option value="medicC">C Medic</mat-option>
+                    <mat-option value="medicD">D Medic</mat-option>
+                  </mat-select>
+                  <mat-hint>
+                      <span [hidden]="!(orderServiceForm.get('medic').hasError('required') && orderServiceForm.get('medic').touched)">
+                          The name of the medic is required
+                      </span>
+                  </mat-hint>
+                </mat-form-field>      
             </p>
-          </form>
-          <p>
-              <span class="half-width">exam price</span>
-              <span class="half-width">Biogic Material need it}} </span>
-              <span class="half-width">exam sector</span>
-              <span class="half-width">Estimated Time</span>
-          </p>
+            <p>
+                <span class="half-width">exam price</span>
+                <span class="half-width">Biogic Material need it}} </span>
+                <span class="half-width">exam sector</span>
+                <span class="half-width">Estimated Time</span>
+            </p>
+            <mat-card-actions >
+                <button type="submit" mat-raised-button [disabled]="orderServiceForm.invalid" >Register Client</button>
+            </mat-card-actions>
+        </form>
         </mat-card-content>
-        <mat-card-actions >
-            <a mat-raised-button routerLink="/end" >Register Client</a>
-        </mat-card-actions>
+        
     </mat-card>
-  </div>
+  
   <div fxFlex></div>
 </div>
