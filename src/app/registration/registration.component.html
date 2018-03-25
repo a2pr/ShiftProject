@@ -64,14 +64,16 @@
                 </mat-hint>
               </mat-form-field>
               </p>
+              <div [hidden]="orderServiceForm.get('pacient').hasError('required') 
+              || orderServiceForm.get('birthday').hasError('required') || orderServiceForm.get('gender').hasError('required') ||
+              orderServiceForm.get('cityFromPacient').hasError('required') || orderServiceForm.get('address').hasError('required')">
+
               <h3>Services require</h3>
               <mat-divider></mat-divider>
               <p>
               <!-- This will fill with a service -->
               <mat-form-field class="half-width">
-                <mat-select formControlName="exam" placeholder="Exam" [disabled]="orderServiceForm.get('pacient').hasError('required') 
-                || orderServiceForm.get('birthday').hasError('required') || orderServiceForm.get('gender').hasError('required') ||
-                orderServiceForm.get('cityFromPacient').hasError('required') || orderServiceForm.get('address').hasError('required')">
+                <mat-select formControlName="exam" placeholder="Exam">
                   <mat-option value="ExamA">Exam A</mat-option>
                   <mat-option value="ExamB">Exam B</mat-option>
                   <mat-option value="ExamC">Exam C</mat-option>
@@ -141,6 +143,8 @@
                   </mat-hint>
                 </mat-form-field>      
             </p>
+              </div>
+             
             <p>
                 <span class="half-width">exam price</span>
                 <span class="half-width">Biogic Material need it}} </span>
