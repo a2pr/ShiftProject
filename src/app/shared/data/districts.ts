@@ -1,111 +1,68 @@
 import {District} from '../district';
+import {CITYS} from './citys';
+
 export const DISTRICTS:District[]=[
     {
         description:'district 1',
-        city:{
-            description:'city 1',
-            UF:"RO"
-        }
+        city:CITYS[0]
     },
     {
         description:'district 2',
-        city:{
-            description:'city 1',
-            UF:"RO"
-        }
+        city:CITYS[0]
     },
     {
         description:'district 3',
-        city:{
-            description:'city 1',
-            UF:"RO"
-        }
+        city:CITYS[0]
     },
     
     {
         description:'district 1',
-        city:{
-            description:'city 2',
-            UF:"RO"
-        }
+        city:CITYS[1]
     },
     {
-        description:'district 1',
-        city:{
-            description:'city 3',
-            UF:"RO"
-        }
+        description:'district 2',
+        city:CITYS[1]
     },
     //
     {
+        description:'district 3',
+        city:CITYS[1]
+    },
+    {
         description:'district 1',
-        city:{
-            description:'city 1',
-            UF:"AM"
-        }
+        city:CITYS[2]
     },
     {
         description:'district 2',
-        city:{
-            description:'city 1',
-            UF:"AM"
-        }
+        city:CITYS[2]
     },
     {
         description:'district 3',
-        city:{
-            description:'city 1',
-            UF:"AM"
-        }
+        city:CITYS[2]
     },
     {
         description:'district 1',
-        city:{
-            description:'city 2',
-            UF:"AM"
-        }
-    },
-    {
-        description:'district 1',
-        city:{
-            description:'city 3',
-            UF:"AM"
-        }
-    },
-    {
-        description:'district 1',
-        city:{
-            description:'city 1',
-            UF:"SP"
-        }
+        city:CITYS[3]
     },
     {
         description:'district 2',
-        city:{
-            description:'city 1',
-            UF:"SP"
-        }
+        city:CITYS[3]
     },
     {
         description:'district 3',
-        city:{
-            description:'city 1',
-            UF:"SP"
-        }
+        city:CITYS[3]
     },
     {
         description:'district 1',
-        city:{
-            description:'city 2',
-            UF:"SP"
-        }
+        city:CITYS[4]
+    },
+    {
+        description:'district 2',
+        city:CITYS[4]
     },
     {
         description:'district 1',
-        city:{
-            description:'city 3',
-            UF:"SP"
-        }
+        city:CITYS[4]
     }
 
 ]

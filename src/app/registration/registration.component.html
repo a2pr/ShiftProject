@@ -1,8 +1,6 @@
 <div fxLayout="column" class="container">
   <div fxFlex></div>
-  
     <mat-card fxFlex fxFlexAlign="center" class="form-size">
-      
         <mat-card-title>
          <h2> Services Order</h2>
         </mat-card-title>
@@ -99,13 +97,10 @@
                     </span>
                 </mat-hint>
               </mat-form-field>
-              <mat-form-field class="half-width">
-                  <mat-select formControlName="cityFromLab" placeholder="City" 
-                  [disabled]="orderServiceForm.get('insurance').hasError('required')">
-                    <mat-option value="cityA">A City</mat-option>
-                    <mat-option value="cityB">B City</mat-option>
-                    <mat-option value="cityC">C City</mat-option>
-                    <mat-option value="cityD">D City</mat-option>
+              <mat-form-field class="half-width" *ngIf="citys">
+                    <mat-select formControlName="cityFromLab" placeholder="City" 
+                  [disabled]="orderServiceForm.get('insurance').hasError('required')" (change)="onSelect()">
+                    <mat-option *ngFor="let city of citys" [value]="city.description">{{city.description}} </mat-option>
                   </mat-select>
                   <mat-hint>
                       <span [hidden]="!(orderServiceForm.get('cityFromLab').hasError('required') && orderServiceForm.get('cityFromLab').touched)">
@@ -113,13 +108,13 @@
                       </span>
                   </mat-hint>
                 </mat-form-field>
-              <mat-form-field class="half-width">
+                
+                  
+              <mat-form-field class="half-width" *ngIf="laboratorys">
                 <mat-select formControlName="lab" placeholder="Applying lab"
                 [disabled]="orderServiceForm.get('cityFromLab').hasError('required')">
-                  <mat-option value="labA">A lab</mat-option>
-                  <mat-option value="labB">B lab</mat-option>
-                  <mat-option value="labC">C lab</mat-option>
-                  <mat-option value="labD">D lab</mat-option>
+                  <mat-option *ngFor="let lab of laboratorys" [value]="lab.description" >{{lab.description}}</mat-option>
+                  
                 </mat-select>
                 <mat-hint>
                     <span [hidden]="!(orderServiceForm.get('lab').hasError('required') && orderServiceForm.get('lab').touched)">

@@ -7,6 +7,14 @@ import {Router} from '@angular/router';
 import {ServiceOrder} from '../shared/serviceOrder';
 import {ServiceOrderExam} from '../shared/serviceOrderExam';
 import {Pacient} from '../shared/pacient';
+import {Medic} from '../shared/medic';
+import {City} from '../shared/city';
+import {Laboratory} from '../shared/laboratory';
+import { EventEmitter } from '@angular/core';
+//services
+import { MedicService } from '../services/medic.service';
+import {CityService} from  '../services/city.service';
+import { LaboratoryService } from '../services/laboratory.service';
 
 @Component({
   selector: 'app-registration',
@@ -18,12 +26,22 @@ export class RegistrationComponent implements OnInit {
   serviceOrderExam:ServiceOrderExam;
   orderServiceForm:FormGroup;
   pacient:Pacient;
+  medics:Medic[];
+  citys:City[];
+  laboratorys:Laboratory[];
+  cityLaboratory:Laboratory[];
   constructor(private fb:FormBuilder,
-    private router:Router) {
+    private router:Router,
+    private medicService:MedicService,
+    private cityService:CityService,
+    private laboratoryService:LaboratoryService ) {
     this.createForm();
    }
 
   ngOnInit() {
+    this.cityService.getCitys().subscribe(citys=>this.citys=citys);
+    this.laboratoryService.getLaboratorys()
+      .subscribe(laboratorys=>this.laboratorys=laboratorys);
   }
   createForm(){
     this.orderServiceForm=this.fb.group({
@@ -41,6 +59,10 @@ export class RegistrationComponent implements OnInit {
       medic:['',Validators.required]
     });
   }
+  onSelect(val){
+  this.laboratoryService.getLaboratory(this.orderServiceForm.get('cityFromLab').value)
+    .subscribe(laboratorys=>this.laboratorys=laboratorys)
+  }
   onSubmit(){
     this.pacient={
       name:this.orderServiceForm.get('pacient').value,
@@ -57,6 +79,7 @@ export class RegistrationComponent implements OnInit {
       laboratory:this.orderServiceForm.get('lab').value,
       medic:this.orderServiceForm.get('medic').value
     }
+    console.log(this.medics);
     console.log(this.serviceOrder, 'nice');
     this.router.navigateByUrl('/end');
   }

@@ -13,7 +13,11 @@ import { HomeComponent } from './home/home.component';
 import { RegistrationComponent } from './registration/registration.component';
 
 import { EndComponent } from './end/end.component';
+
 //Services
+import { MedicService } from './services/medic.service';
+import { CityService } from './services/city.service';
+import { LaboratoryService } from './services/laboratory.service';
 
 @NgModule({
   declarations: [
@@ -31,7 +35,11 @@ import { EndComponent } from './end/end.component';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    MedicService,
+    CityService,
+    LaboratoryService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
