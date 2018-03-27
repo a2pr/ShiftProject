@@ -9,8 +9,9 @@ import 'rxjs/add/operator/delay';
 export class MedicService {
 
   constructor() { }
-  getMedics():Observable<Medic[]>{
-    return Observable.of(MEDICS).delay(1000);
+  getMedic(laboratory:string):Observable<Medic[]>{
+    return Observable.of(MEDICS
+    .filter((medic)=>(medic.laboratory.description==laboratory)));
   }
  
 }

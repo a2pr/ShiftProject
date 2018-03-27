@@ -11,10 +11,13 @@ import {Medic} from '../shared/medic';
 import {City} from '../shared/city';
 import {Laboratory} from '../shared/laboratory';
 import { EventEmitter } from '@angular/core';
+var jquery:any; 
+declare var $ :any;
 //services
 import { MedicService } from '../services/medic.service';
 import {CityService} from  '../services/city.service';
 import { LaboratoryService } from '../services/laboratory.service';
+import  * as jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-registration',
@@ -29,7 +32,7 @@ export class RegistrationComponent implements OnInit {
   medics:Medic[];
   citys:City[];
   laboratorys:Laboratory[];
-  cityLaboratory:Laboratory[];
+
   constructor(private fb:FormBuilder,
     private router:Router,
     private medicService:MedicService,
@@ -59,10 +62,16 @@ export class RegistrationComponent implements OnInit {
       medic:['',Validators.required]
     });
   }
-  onSelect(val){
+  onSelectCity(val){
   this.laboratoryService.getLaboratory(this.orderServiceForm.get('cityFromLab').value)
     .subscribe(laboratorys=>this.laboratorys=laboratorys)
   }
+  
+  onSelectLab(val){
+  this.medicService.getMedic(this.orderServiceForm.get('lab').value)
+    .subscribe(medics=>this.medics=medics)
+  }
+
   onSubmit(){
     this.pacient={
       name:this.orderServiceForm.get('pacient').value,
@@ -79,8 +88,56 @@ export class RegistrationComponent implements OnInit {
       laboratory:this.orderServiceForm.get('lab').value,
       medic:this.orderServiceForm.get('medic').value
     }
-    console.log(this.medics);
     console.log(this.serviceOrder, 'nice');
+   this.getPdf();
     this.router.navigateByUrl('/end');
+  }
+
+  getPdf(){
+    var doc =new jsPDF()
+    var source=$('body')[0];
+    var title1= $('<h1><h1>').text('Protocol for '+ this.serviceOrder.laboratory)
+      .addClass('title1').appendTo(source);
+    var styles=$("<style>")
+                .prop("type", "text/css")
+                  .html("\
+                  .customers {\
+                    font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;\
+                    border-collapse: collapse;\
+                    width: 95%;\
+                    margin: auto;\
+                    margin-top:20px; \
+                    margin-bottom: 20px;\
+                }\
+                \
+                .customers td, #customers th {\
+                    border: 1px solid #ddd;\
+                    padding: 8px;\
+                }\
+                .customers tr:nth-child(even){background-color: #f2f2f2;}\
+                \
+                .customers tr:hover {background-color: #ddd;}\
+                \
+                .customers th {\
+                    padding-top: 12px;\
+                    padding-bottom: 12px;\
+                    text-align: left;\
+                    background-color: #4CAF50;\
+                    color: white;\
+                    }\
+                    .title1{\
+                        float: left;\
+                    }\
+                    .title2{\
+                        float: right;\
+                    }\
+                    body{\
+                        padding:10px;\
+                    }")
+                  .appendTo(source);
+    var table=$('<table></table>').appendTo(source);
+    
+    doc.fromHTML(source,5,5);
+    doc.save('test.pdf');
   }
 }
