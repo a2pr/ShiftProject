@@ -126,13 +126,11 @@ setPatient(val){
   getPdf(){
     console.log(document.getElementById('pdfmain'));
     var doc =new jsPDF();  
-  //  html2canvas(document.getElementById('pdfmain')).then(function(canvas){
-      
-  //   var img=canvas.toDataURL("image/png");
-  //       doc.addImage(img,'JPEG',20,20);
-  //       doc.save('test2.pdf');
-    // });
-    doc.text(this.pacient.name +'\n'+this.pacient.birthday+'\n'+ this.serviceOrder.id,
+    doc.text("Patient Information -----------------------------"+this.serviceOrder.id+"\nPatient name:"+this.pacient.name +"\nBirthday:"+
+    this.pacient.birthday+'\n'+"Gender: "+this.pacient.gender+"\n"+"Date of registration: "+ this.serviceOrder.date+"\nCity: "
+    +this.pacient.city+"\nAddress:"+this.pacient.address+"\n\n\nService Order Information: \nOrder ID: " +
+    this.serviceOrder.id + "\nOrder Date registration: "+this.serviceOrder.date +"\nInsurance company: "+this.serviceOrder.contract
+    +"\nLaboratory requested: "+this.serviceOrder.laboratory+"\n Assign medic: "+ this.serviceOrder.medic+"\n \n \n \n \n \n---------------------------------------------------------",
   15,15)
   doc.save('text.pdf');
    }
