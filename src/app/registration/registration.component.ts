@@ -11,13 +11,21 @@ import {Medic} from '../shared/medic';
 import {City} from '../shared/city';
 import {Laboratory} from '../shared/laboratory';
 import { EventEmitter } from '@angular/core';
+import  * as jsPDF from 'jspdf';
 var jquery:any; 
 declare var $ :any;
+import {ExamPrice} from '../shared/examPrice';
+import { Exam } from '../shared/exam';
+import { Contract } from '../shared/contract';
+
 //services
 import { MedicService } from '../services/medic.service';
 import {CityService} from  '../services/city.service';
 import { LaboratoryService } from '../services/laboratory.service';
-import  * as jsPDF from 'jspdf';
+
+import { ExamService } from '../services/exam.service';
+import { ContractService } from '../services/contract.service';
+
 
 @Component({
   selector: 'app-registration',
@@ -25,6 +33,7 @@ import  * as jsPDF from 'jspdf';
   styleUrls: ['./registration.component.scss']
 })
 export class RegistrationComponent implements OnInit {
+  //VARIABLES
   serviceOrder:ServiceOrder;
   serviceOrderExam:ServiceOrderExam;
   orderServiceForm:FormGroup;
@@ -32,19 +41,31 @@ export class RegistrationComponent implements OnInit {
   medics:Medic[];
   citys:City[];
   laboratorys:Laboratory[];
-
+  exams:Exam[];
+  examPrice:ExamPrice;
+  insurances:Contract[];
+  pdf:boolean=true;
   constructor(private fb:FormBuilder,
     private router:Router,
     private medicService:MedicService,
     private cityService:CityService,
-    private laboratoryService:LaboratoryService ) {
+    private laboratoryService:LaboratoryService,
+    private examService:ExamService,
+    private contractService:ContractService ) {
     this.createForm();
    }
 
   ngOnInit() {
-    this.cityService.getCitys().subscribe(citys=>this.citys=citys);
+    this.cityService.getCitys()
+      .subscribe(citys=>this.citys=citys);
+
     this.laboratoryService.getLaboratorys()
       .subscribe(laboratorys=>this.laboratorys=laboratorys);
+    //gets exams
+    this.examService.getExams()
+      .subscribe(exams=>this.exams=exams);
+    this.contractService.getContracts()
+      .subscribe(contracts=>this.insurances=contracts);
   }
   createForm(){
     this.orderServiceForm=this.fb.group({
@@ -71,73 +92,48 @@ export class RegistrationComponent implements OnInit {
   this.medicService.getMedic(this.orderServiceForm.get('lab').value)
     .subscribe(medics=>this.medics=medics)
   }
-
+  onSelectExam(val){
+    this.examService.getExamsPrice(this.orderServiceForm.get('exam').value,
+    this.orderServiceForm.get('insurance').value)
+      .subscribe(examPrice=>this.examPrice=examPrice)
+  }
+setPatient(val){
+  this.pacient={
+    name:this.orderServiceForm.get('pacient').value,
+    birthday:this.orderServiceForm.get('birthday').value,
+    gender:this.orderServiceForm.get('gender').value,
+    address:this.orderServiceForm.get('address').value,
+    city:this.orderServiceForm.get('cityFromPacient').value
+   
+  };
+  this.serviceOrder={
+    id:this.orderServiceForm.get('id').value,
+    date:this.orderServiceForm.get('date').value,
+    pacient:this.pacient,
+    contract:this.orderServiceForm.get('insurance').value,
+    laboratory:this.orderServiceForm.get('lab').value,
+    medic:this.orderServiceForm.get('medic').value
+  }
+  console.log(this.pacient);
+}
   onSubmit(){
-    this.pacient={
-      name:this.orderServiceForm.get('pacient').value,
-      birthday:this.orderServiceForm.get('birthday').value,
-      gender:this.orderServiceForm.get('gender').value,
-      address:this.orderServiceForm.get('address').value,
-      city:this.orderServiceForm.get('cityFromPacient').value
-    };
-    this.serviceOrder={
-      id:this.orderServiceForm.get('id').value,
-      date:this.orderServiceForm.get('date').value,
-      pacient:this.pacient,
-      contract:this.orderServiceForm.get('insurance').value,
-      laboratory:this.orderServiceForm.get('lab').value,
-      medic:this.orderServiceForm.get('medic').value
-    }
     console.log(this.serviceOrder, 'nice');
-   this.getPdf();
+    this.pdf=false;
+    this.getPdf();
     this.router.navigateByUrl('/end');
   }
 
   getPdf(){
-    var doc =new jsPDF()
-    var source=$('body')[0];
-    var title1= $('<h1><h1>').text('Protocol for '+ this.serviceOrder.laboratory)
-      .addClass('title1').appendTo(source);
-    var styles=$("<style>")
-                .prop("type", "text/css")
-                  .html("\
-                  .customers {\
-                    font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;\
-                    border-collapse: collapse;\
-                    width: 95%;\
-                    margin: auto;\
-                    margin-top:20px; \
-                    margin-bottom: 20px;\
-                }\
-                \
-                .customers td, #customers th {\
-                    border: 1px solid #ddd;\
-                    padding: 8px;\
-                }\
-                .customers tr:nth-child(even){background-color: #f2f2f2;}\
-                \
-                .customers tr:hover {background-color: #ddd;}\
-                \
-                .customers th {\
-                    padding-top: 12px;\
-                    padding-bottom: 12px;\
-                    text-align: left;\
-                    background-color: #4CAF50;\
-                    color: white;\
-                    }\
-                    .title1{\
-                        float: left;\
-                    }\
-                    .title2{\
-                        float: right;\
-                    }\
-                    body{\
-                        padding:10px;\
-                    }")
-                  .appendTo(source);
-    var table=$('<table></table>').appendTo(source);
-    
-    doc.fromHTML(source,5,5);
-    doc.save('test.pdf');
-  }
+    console.log(document.getElementById('pdfmain'));
+    var doc =new jsPDF();  
+  //  html2canvas(document.getElementById('pdfmain')).then(function(canvas){
+      
+  //   var img=canvas.toDataURL("image/png");
+  //       doc.addImage(img,'JPEG',20,20);
+  //       doc.save('test2.pdf');
+    // });
+    doc.text(this.pacient.name +'\n'+this.pacient.birthday+'\n'+ this.serviceOrder.id,
+  15,15)
+  doc.save('text.pdf');
+   }
 }

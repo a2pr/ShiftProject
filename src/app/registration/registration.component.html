@@ -54,7 +54,7 @@
                 <!--  -->
               </mat-form-field>
               <mat-form-field class="full-width">
-                <textarea  formControlName="address" matInput placeholder="Address" cols="5" rows="5"></textarea>
+                <textarea  formControlName="address" matInput placeholder="Address" cols="5" rows="5" ></textarea>
                 <mat-hint>
                     <span [hidden]="!(orderServiceForm.get('address').hasError('required') && orderServiceForm.get('address').touched)">
                         The address of the Pacient is required
@@ -70,12 +70,9 @@
               <mat-divider></mat-divider>
               <p>
               <!-- This will fill with a service -->
-              <mat-form-field class="half-width">
+              <mat-form-field class="half-width" *ngIf="exams">
                 <mat-select formControlName="exam" placeholder="Exam">
-                  <mat-option value="ExamA">Exam A</mat-option>
-                  <mat-option value="ExamB">Exam B</mat-option>
-                  <mat-option value="ExamC">Exam C</mat-option>
-                  <mat-option value="ExamD">Exam D</mat-option>
+                  <mat-option *ngFor="let exam of exams" [value]="exam.description">{{exam.description}} </mat-option>
                 </mat-select>
                 <mat-hint>
                     <span [hidden]="!(orderServiceForm.get('exam').hasError('required') && orderServiceForm.get('exam').touched)">
@@ -83,13 +80,10 @@
                     </span>
                 </mat-hint>
               </mat-form-field>
-              <mat-form-field class="half-width">
+              <mat-form-field class="half-width" *ngIf="insurances">
                 <mat-select formControlName="insurance" placeholder="Insurance Company" 
-                [disabled]="orderServiceForm.get('exam').hasError('required')">
-                  <mat-option value="companyA">Company A</mat-option>
-                  <mat-option value="companyB">Company B</mat-option>
-                  <mat-option value="companyC">Company C</mat-option>
-                  <mat-option value="companyD">Company D</mat-option>
+                [disabled]="orderServiceForm.get('exam').hasError('required')" (change)="onSelectExam()">
+                  <mat-option *ngFor="let insurance of insurances" [value]="insurance.description">{{insurance.description}} </mat-option>
                 </mat-select>
                 <mat-hint>
                     <span [hidden]="!(orderServiceForm.get('insurance').hasError('required') && orderServiceForm.get('insurance').touched)">
@@ -125,7 +119,7 @@
               <!-- select medic -->
               <mat-form-field class="half-width" *ngIf="medics">
                   <mat-select formControlName="medic" placeholder="Medic" 
-                  [disabled]="orderServiceForm.get('lab').hasError('required')">
+                  [disabled]="orderServiceForm.get('lab').hasError('required')" (change)="setPatient()">
                     <mat-option *ngFor="let medic of medics" [value]="medic.name" >{{medic.name}} </mat-option>
                     
                   </mat-select>
@@ -137,20 +131,93 @@
                 </mat-form-field>      
             </p>
               </div>
-             
-            <p>
-                <span class="half-width">exam price</span>
-                <span class="half-width">Biogic Material need it}} </span>
-                <span class="half-width">exam sector</span>
-                <span class="half-width">Estimated Time</span>
-            </p>
+            <table class="customers" *ngIf="examPrice">
+                <tr >
+                    <th>Exam Information</th>
+                </tr>
+                <tr>
+                    <td>Exam Price:</td> 
+                    <td>{{examPrice.price}} R$</td>
+                    <td>Require Biologic Material:</td>
+                    <td>{{examPrice.exam.biologicMaterial}} </td>
+                </tr>
+                <tr>
+                    <td>Exam sector: </td> 
+                    <td> {{examPrice.exam.sector.description}}</td>
+                    <td>Estimated Time:</td>
+                    <td>{{examPrice.exam.timeLimit}} days</td>
+                </tr>
+                
+            </table>
             <mat-card-actions >
                 <button type="submit" mat-raised-button [disabled]="orderServiceForm.invalid" >Register Client</button>
             </mat-card-actions>
         </form>
         </mat-card-content>
+        <!-- <app-document  [pacient]='pacient' [serviceOrder]='serviceOrder'></app-document> -->
         
     </mat-card>
-  
+    <div *ngIf="pacient && serviceOrder" id="pdfmain">
+        <div >
+            <h1 class="title1">lorem impson</h1>
+            <h1 class="title2">RECEIVE</h1>
+            
+            
+        </div>
+        <div style="clear:left" >
+                <span class="date">date:xxxxxxxxxxxx</span>
+                <br><br>
+            <table class="customers">
+                <tr >
+                    <th>Patient Information</th>
+                </tr>
+                <tr>
+                    <td>Patient name:</td> 
+                    <td>{{pacient.name}} </td>
+                    <td>Birthday:</td>
+                    <td>{{pacient.birthday}}</td>
+                </tr>
+                <tr>
+                    <td>Gender:</td> 
+                    <td>{{pacient.gender}}</td>
+                    <td>Date of registration:</td>
+                    <td>{{serviceOrder.date}} </td>
+                </tr>
+                <tr>
+                    <td>City:</td> 
+                    <td>{{pacient.city}} </td>
+                    <td>Address</td>
+                    <td>{{pacient.address}}</td>
+                </tr>
+            </table>
+        </div>
+        <hr>
+        <div >
+            <table class="customers">
+                <tr >
+                    <th>Service Order Information:</th>
+      
+                </tr>
+                <tr>
+                    <td>Order ID:</td>
+                    <td>{{serviceOrder.id}} </td>
+                    <td>Order Date registration:</td>
+                    <td>{{serviceOrder.date}}</td>
+                </tr>
+                <tr>
+                    <td>Insurance company:</td>
+                    <td>{{serviceOrder.contract}} </td>
+                    <td>Laboratory requested:</td>
+                    <td>{{serviceOrder.laboratory}} </td>
+                </tr>
+                <tr>
+                    <td>Assign medic:</td>
+                    <td>{{serviceOrder.medic}} </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+      </div> 
   <div fxFlex></div>
 </div>

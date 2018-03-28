@@ -3,5 +3,5 @@ export class Exam{
     description:string;
     sector:Sector;
     biologicMaterial:string;
-    timeLimit:number;//days
+    timeLimit:Number;//days
 }

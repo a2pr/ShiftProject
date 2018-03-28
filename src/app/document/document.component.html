@@ -1,0 +1,61 @@
+
+<div id="pdf">
+  <div >
+      <h1 class="title1">lorem impson</h1>
+      <h1 class="title2">RECEIVE</h1>
+      
+      
+  </div>
+  <div style="clear:left" >
+          <span class="date">date:xxxxxxxxxxxx</span>
+          <br><br>
+      <table class="customers">
+          <tr >
+              <th>Patient Information</th>
+          </tr>
+          <tr>
+              <td>Patient name:</td> 
+              <td>{{pacient.name}} </td>
+              <td>Birthday:</td>
+              <td>{{pacient.birthday}}</td>
+          </tr>
+          <tr>
+              <td>Gender:</td> 
+              <td>{{pacient.gender}}</td>
+              <td>Date of registration:</td>
+              <td>{{serviceOrder.date}} </td>
+          </tr>
+          <tr>
+              <td>City:</td> 
+              <td>{{pacient.city}} </td>
+              <td>Address</td>
+              <td>{{pacient.address}}</td>
+          </tr>
+      </table>
+  </div>
+  <hr>
+  <div >
+      <table class="customers">
+          <tr >
+              <th>Service Order Information:</th>
+
+          </tr>
+          <tr>
+              <td>Order ID:</td>
+              <td>{{serviceOrder.id}} </td>
+              <td>Order Date registration:</td>
+              <td>{{serviceOrder.date}}</td>
+          </tr>
+          <tr>
+              <td>Insurance company:</td>
+              <td>{{serviceOrder.contract}} </td>
+              <td>Laboratory requested:</td>
+              <td>{{serviceOrder.laboratory}} </td>
+          </tr>
+          <tr>
+              <td>Assign medic:</td>
+              <td>{{serviceOrder.medic}} </td>
+          </tr>
+      </table>
+  </div>
+</div> 
