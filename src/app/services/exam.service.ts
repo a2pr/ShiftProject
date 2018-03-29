@@ -18,7 +18,7 @@ export class ExamService {
   getExamsPrice(exam:string, contract:string):Observable<ExamPrice>{
     return Observable.of(EXAMPRICES
       .filter((examPrice)=>(examPrice.exam.description==exam &&
-        examPrice.contract.description==contract))[0])
+        examPrice.contract.description==contract))[0]).delay(1000);
   }
 
 }

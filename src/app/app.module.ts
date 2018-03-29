@@ -11,7 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { RegistrationComponent } from './registration/registration.component';
-import { DocumentComponent } from './document/document.component';
+
 
 import { EndComponent } from './end/end.component';
 
@@ -27,8 +27,7 @@ import { ContractService } from './services/contract.service';
     AppComponent,
     HomeComponent,
     RegistrationComponent,
-    EndComponent,
-    DocumentComponent
+    EndComponent
   ],
   imports: [
     BrowserModule,

@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {Router} from '@angular/router';
+import { DatePipe } from '@angular/common';
 //classes
 import {ServiceOrder} from '../shared/serviceOrder';
 import {ServiceOrderExam} from '../shared/serviceOrderExam';
@@ -22,15 +23,24 @@ import { Contract } from '../shared/contract';
 import { MedicService } from '../services/medic.service';
 import {CityService} from  '../services/city.service';
 import { LaboratoryService } from '../services/laboratory.service';
-
 import { ExamService } from '../services/exam.service';
 import { ContractService } from '../services/contract.service';
-
+import {visibility,flyInOut, expand} from '../animations/app.animation';
 
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
-  styleUrls: ['./registration.component.scss']
+  styleUrls: ['./registration.component.scss'],
+  host:{
+    '[@flyInOut]':'true',
+    'style':'display:block;'
+  },
+  animations: [
+   visibility(),
+   flyInOut(), 
+   expand()
+  ]
+  
 })
 export class RegistrationComponent implements OnInit {
   //VARIABLES
@@ -44,7 +54,9 @@ export class RegistrationComponent implements OnInit {
   exams:Exam[];
   examPrice:ExamPrice;
   insurances:Contract[];
-  pdf:boolean=true;
+  visibilityServiceOrder='hidden';
+  visibilityTable='hidden';
+
   constructor(private fb:FormBuilder,
     private router:Router,
     private medicService:MedicService,
@@ -83,6 +95,9 @@ export class RegistrationComponent implements OnInit {
       medic:['',Validators.required]
     });
   }
+  onPatientReady(){
+    this.visibilityServiceOrder='shown';
+  }
   onSelectCity(val){
   this.laboratoryService.getLaboratory(this.orderServiceForm.get('cityFromLab').value)
     .subscribe(laboratorys=>this.laboratorys=laboratorys)
@@ -93,14 +108,17 @@ export class RegistrationComponent implements OnInit {
     .subscribe(medics=>this.medics=medics)
   }
   onSelectExam(val){
+    //not working corrextly
+    this.visibilityTable='shown';
     this.examService.getExamsPrice(this.orderServiceForm.get('exam').value,
     this.orderServiceForm.get('insurance').value)
-      .subscribe(examPrice=>this.examPrice=examPrice)
+      .subscribe(examPrice=>{ this.examPrice=examPrice })
+    
   }
 setPatient(val){
   this.pacient={
     name:this.orderServiceForm.get('pacient').value,
-    birthday:this.orderServiceForm.get('birthday').value,
+    birthday:this.orderServiceForm.get('birthday').value.toLocaleDateString(),
     gender:this.orderServiceForm.get('gender').value,
     address:this.orderServiceForm.get('address').value,
     city:this.orderServiceForm.get('cityFromPacient').value
@@ -108,7 +126,7 @@ setPatient(val){
   };
   this.serviceOrder={
     id:this.orderServiceForm.get('id').value,
-    date:this.orderServiceForm.get('date').value,
+    date:this.orderServiceForm.get('date').value.toLocaleDateString(),
     pacient:this.pacient,
     contract:this.orderServiceForm.get('insurance').value,
     laboratory:this.orderServiceForm.get('lab').value,
@@ -118,7 +136,6 @@ setPatient(val){
 }
   onSubmit(){
     console.log(this.serviceOrder, 'nice');
-    this.pdf=false;
     this.getPdf();
     this.router.navigateByUrl('/end');
   }
