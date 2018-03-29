@@ -1,15 +1,16 @@
 <div fxLayout="column" class="container">
   <div fxFlex></div>
     <mat-card fxFlex fxFlexAlign="center" class="form-size">
-        <mat-card-title>
+      <mat-card-title>
          <h2> Services Order</h2>
-        </mat-card-title>
-        <mat-card-content>
+      </mat-card-title>
+      <mat-card-content>
           <form [formGroup]='orderServiceForm' (ngSubmit)="onSubmit()" >
             <h3>Pacient</h3>
-                   <div>
+            <!-- Pacient section -->
+              <div>
                         <p>
-                                <mat-divider></mat-divider> 
+                          <mat-divider></mat-divider> 
                           <mat-form-field class="half-width" >
                               <input matInput formControlName="pacient" placeholder="Pacient name" required >
                               <mat-error [hidden]="!(orderServiceForm.get('pacient').hasError('required') && orderServiceForm.get('pacient').touched)">The name of the Pacient is required</mat-error>
@@ -31,7 +32,7 @@
                           </mat-form-field>
                           <mat-form-field class="half-width">
             
-                            <!-- This will fill with a service -->
+                            
                             <mat-select formControlName="cityFromPacient" placeholder="City">
                               <mat-option value="cityA">A City</mat-option>
                               <mat-option value="cityB">B City</mat-option>
@@ -42,7 +43,7 @@
                             && orderServiceForm.get('cityFromPacient').touched)"> The city of residence of the Pacient is required</mat-error>
                 
                            
-                            <!--  -->
+                           
                           </mat-form-field>
             
                           <mat-form-field class="full-width">
@@ -54,66 +55,67 @@
                           </p>
                           
                    </div>
-            
-              <div *ngIf="serviceOrderView" [@expand]>
+            <!-- End of Pacient section -->
+            <!-- Service order Section -->
+              <div *ngIf="serviceOrderView" [@expand]> 
+                <h3>Services require</h3>
+                <mat-divider></mat-divider>
+                <p>
+                  <mat-form-field class="half-width" *ngIf="exams">
+                    <mat-select formControlName="exam" placeholder="Exam">
+                      <mat-option *ngFor="let exam of exams" [value]="exam.description">{{exam.description}} </mat-option>
+                    </mat-select>
+                    <mat-error [hidden]="!(orderServiceForm.get('exam').hasError('required') && orderServiceForm.get('exam').touched)">
+                            he exam apply for Pacient is required
+                    </mat-error>
+                  </mat-form-field>
 
-              <h3>Services require</h3>
-              <mat-divider></mat-divider>
-              <p>
-              <!-- This will fill with a service -->
-              <mat-form-field class="half-width" *ngIf="exams">
-                <mat-select formControlName="exam" placeholder="Exam">
-                  <mat-option *ngFor="let exam of exams" [value]="exam.description">{{exam.description}} </mat-option>
-                </mat-select>
-                <mat-error [hidden]="!(orderServiceForm.get('exam').hasError('required') && orderServiceForm.get('exam').touched)">
-                        he exam apply for Pacient is required
-                </mat-error>
-              </mat-form-field>
+                  <mat-form-field class="half-width" *ngIf="insurances">
+                    <mat-select formControlName="insurance" placeholder="Insurance Company" 
+                    [disabled]="orderServiceForm.get('exam').hasError('required')" (change)="onSelectExam()">
+                      <mat-option *ngFor="let insurance of insurances" [value]="insurance.description">{{insurance.description}} </mat-option>
+                    </mat-select>
+                    <mat-error [hidden]="!(orderServiceForm.get('insurance').hasError('required') && orderServiceForm.get('insurance').touched)">
+                        The insurance company of Pacient is required
+                    </mat-error>
+                  </mat-form-field>
+                  <!-- select city -->
+                  <mat-form-field class="half-width" *ngIf="citys">
+                        <mat-select formControlName="cityFromLab" placeholder="City" 
+                      [disabled]="orderServiceForm.get('insurance').hasError('required')" (change)="onSelectCity()">
+                        <mat-option *ngFor="let city of citys" [value]="city.description">{{city.description}} </mat-option>
+                      </mat-select>
+                      <mat-error [hidden]="!(orderServiceForm.get('cityFromLab').hasError('required') && orderServiceForm.get('cityFromLab').touched)">
+                            The city of the lab is required
+                      </mat-error>
+                  </mat-form-field>
 
-              <mat-form-field class="half-width" *ngIf="insurances">
-                <mat-select formControlName="insurance" placeholder="Insurance Company" 
-                [disabled]="orderServiceForm.get('exam').hasError('required')" (change)="onSelectExam()">
-                  <mat-option *ngFor="let insurance of insurances" [value]="insurance.description">{{insurance.description}} </mat-option>
-                </mat-select>
-                <mat-error [hidden]="!(orderServiceForm.get('insurance').hasError('required') && orderServiceForm.get('insurance').touched)">
-                    The insurance company of Pacient is required
-                </mat-error>
-              </mat-form-field>
-              <!-- select city -->
-              <mat-form-field class="half-width" *ngIf="citys">
-                    <mat-select formControlName="cityFromLab" placeholder="City" 
-                  [disabled]="orderServiceForm.get('insurance').hasError('required')" (change)="onSelectCity()">
-                    <mat-option *ngFor="let city of citys" [value]="city.description">{{city.description}} </mat-option>
-                  </mat-select>
-                  <mat-error [hidden]="!(orderServiceForm.get('cityFromLab').hasError('required') && orderServiceForm.get('cityFromLab').touched)">
-                        The city of the lab is required
-                  </mat-error>
-                </mat-form-field>
-
-                <!-- select lab -->
-              <mat-form-field class="half-width" *ngIf="laboratorys">
-                <mat-select formControlName="lab" placeholder="Applying lab"
-                [disabled]="orderServiceForm.get('cityFromLab').hasError('required')" (change)="onSelectLab()">
-                  <mat-option *ngFor="let lab of laboratorys" [value]="lab.description" >{{lab.description}}</mat-option>
-                </mat-select>
-                <mat-error [hidden]="!(orderServiceForm.get('lab').hasError('required') && orderServiceForm.get('lab').touched)">
-                    The lab where the Pacient is gonna be treated is required
-                </mat-error>
-              </mat-form-field>
-              <!-- select medic -->
-              <mat-form-field class="half-width" *ngIf="medics">
-                  <mat-select formControlName="medic" placeholder="Medic" 
-                  [disabled]="orderServiceForm.get('lab').hasError('required')" (change)="setPatient()">
-                    <mat-option *ngFor="let medic of medics" [value]="medic.name" >{{medic.name}} </mat-option>
+                    <!-- select lab -->
+                  <mat-form-field class="half-width" *ngIf="laboratorys">
+                    <mat-select formControlName="lab" placeholder="Applying lab"
+                    [disabled]="orderServiceForm.get('cityFromLab').hasError('required')" (change)="onSelectLab()">
+                      <mat-option *ngFor="let lab of laboratorys" [value]="lab.description" >{{lab.description}}</mat-option>
+                    </mat-select>
+                    <mat-error [hidden]="!(orderServiceForm.get('lab').hasError('required') && orderServiceForm.get('lab').touched)">
+                        The lab where the Pacient is gonna be treated is required
+                    </mat-error>
+                  </mat-form-field>
+                  <!-- select medic -->
+                  <mat-form-field class="half-width" *ngIf="medics">
+                      <mat-select formControlName="medic" placeholder="Medic" 
+                      [disabled]="orderServiceForm.get('lab').hasError('required')" (change)="setPatient()">
+                        <mat-option *ngFor="let medic of medics" [value]="medic.name" >{{medic.name}} </mat-option>
+                        
+                      </mat-select>
+                      <mat-error [hidden]="!(orderServiceForm.get('medic').hasError('required') && orderServiceForm.get('medic').touched)">
+                            The name of the medic is required
+                      </mat-error>
                     
-                  </mat-select>
-                  <mat-error [hidden]="!(orderServiceForm.get('medic').hasError('required') && orderServiceForm.get('medic').touched)">
-                        The name of the medic is required
-                  </mat-error>
-                 
-                </mat-form-field>      
-            </p>
+                  </mat-form-field>
+                  <!--End of Service order Section -->
+                </p>
               </div>
+              <!-- Table price section -->
               <div *ngIf="examPrice" [@expand]>
                 <table class="customers" >
                     <tr >
@@ -134,14 +136,10 @@
                     
                 </table>
               </div>
-            
-            
+                <!-- End of Table price section -->
                 <button color="primary" type="submit" mat-raised-button [disabled]="orderServiceForm.invalid" >Register Client</button>
-            
-        </form>
-        </mat-card-content>
-        <!-- <app-document  [pacient]='pacient' [serviceOrder]='serviceOrder'></app-document> -->
-        
+          </form>
+      </mat-card-content>   
     </mat-card>
   <div fxFlex></div>
 </div>

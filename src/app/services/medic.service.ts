@@ -1,13 +1,17 @@
+//Modules
 import { Injectable } from '@angular/core';
-import {MEDICS} from '../shared/data/medics';
-import {Medic} from '../shared/medic';
 import { Observable } from 'rxjs/Observable';
-import {Laboratory} from '../shared/laboratory';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/delay';
+//classes
+import {Medic} from '../shared/medic';
+import {Laboratory} from '../shared/laboratory';
+//Data
+import {MEDICS} from '../shared/data/medics';
+
 @Injectable()
 export class MedicService {
-
+//service to get data saved from the medics
   constructor() { }
   getMedic(laboratory:string):Observable<Medic[]>{
     return Observable.of(MEDICS

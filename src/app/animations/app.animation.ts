@@ -1,5 +1,5 @@
 import { trigger, state, style, animate, transition } from '@angular/animations';
-
+//Animations use in the App
 export function flyInOut(){
     return trigger('flyInOut',[
         state('*', style({ opacity: 1, transform: 'translateX(0)'})),

@@ -4,6 +4,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {Router} from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { EventEmitter } from '@angular/core';
 //classes
 import {ServiceOrder} from '../shared/serviceOrder';
 import {ServiceOrderExam} from '../shared/serviceOrderExam';
@@ -11,26 +12,24 @@ import {Pacient} from '../shared/pacient';
 import {Medic} from '../shared/medic';
 import {City} from '../shared/city';
 import {Laboratory} from '../shared/laboratory';
-import { EventEmitter } from '@angular/core';
 import  * as jsPDF from 'jspdf';
-var jquery:any; 
-declare var $ :any;
 import {ExamPrice} from '../shared/examPrice';
 import { Exam } from '../shared/exam';
 import { Contract } from '../shared/contract';
-
 //services
 import { MedicService } from '../services/medic.service';
 import {CityService} from  '../services/city.service';
 import { LaboratoryService } from '../services/laboratory.service';
 import { ExamService } from '../services/exam.service';
 import { ContractService } from '../services/contract.service';
+//animations
 import {flyInOut, expand} from '../animations/app.animation';
 
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.scss'],
+  //Animation Functionality
   host:{
     '[@flyInOut]':'true',
     'style':'display:block;'
@@ -53,9 +52,8 @@ export class RegistrationComponent implements OnInit {
   exams:Exam[];
   examPrice:ExamPrice;
   insurances:Contract[];
-  visibilityServiceOrder='hidden';
-  visibilityTable='hidden';
   serviceOrderView=false;
+
   constructor(private fb:FormBuilder,
     private router:Router,
     private medicService:MedicService,
@@ -67,17 +65,20 @@ export class RegistrationComponent implements OnInit {
    }
 
   ngOnInit() {
+    //fetching data
     this.cityService.getCitys()
       .subscribe(citys=>this.citys=citys);
 
     this.laboratoryService.getLaboratorys()
       .subscribe(laboratorys=>this.laboratorys=laboratorys);
-    //gets exams
+
     this.examService.getExams()
       .subscribe(exams=>this.exams=exams);
+
     this.contractService.getContracts()
       .subscribe(contracts=>this.insurances=contracts);
   }
+  //Mapping of form
   createForm(){
     this.orderServiceForm=this.fb.group({
       id:Math.floor((Math.random() * 100) + 1),
@@ -94,27 +95,27 @@ export class RegistrationComponent implements OnInit {
       medic:['',Validators.required]
     });
   }
+  //shows Service Order section
   onPatientReady(){
-    this.visibilityServiceOrder='shown';
     this.serviceOrderView=true;
   }
+  //gets Laboratory by selected city
   onSelectCity(val){
   this.laboratoryService.getLaboratory(this.orderServiceForm.get('cityFromLab').value)
     .subscribe(laboratorys=>this.laboratorys=laboratorys)
   }
-  
+  //gets Medic by selected Lab
   onSelectLab(val){
   this.medicService.getMedic(this.orderServiceForm.get('lab').value)
     .subscribe(medics=>this.medics=medics)
   }
+//gets selected exams price
   onSelectExam(val){
-    //not working corrextly
-    this.visibilityTable='shown';
     this.examService.getExamsPrice(this.orderServiceForm.get('exam').value,
     this.orderServiceForm.get('insurance').value)
       .subscribe(examPrice=>{ this.examPrice=examPrice })
-    
   }
+//Maps the provided information from the user, before submitting
 setPatient(val){
   this.pacient={
     name:this.orderServiceForm.get('pacient').value,
@@ -132,23 +133,25 @@ setPatient(val){
     laboratory:this.orderServiceForm.get('lab').value,
     medic:this.orderServiceForm.get('medic').value
   }
-  console.log(this.pacient);
 }
+//Gets information provided and prints a PDF receipt
+getPdf(){
+  console.log(document.getElementById('pdfmain'));
+  var doc =new jsPDF();  
+  doc.text("Patient Information -----------------------------"+this.serviceOrder.id+"\nPatient name:"+this.pacient.name +"\nBirthday:"+
+  this.pacient.birthday+'\n'+"Gender: "+this.pacient.gender+"\n"+"Date of registration: "+ this.serviceOrder.date+"\nCity: "
+  +this.pacient.city+"\nAddress:"+this.pacient.address+"\n\n\nService Order Information: \nOrder ID: " +
+  this.serviceOrder.id + "\nOrder Date registration: "+this.serviceOrder.date +"\nInsurance company: "+this.serviceOrder.contract
+  +"\nLaboratory requested: "+this.serviceOrder.laboratory+"\n Assign medic: "+ this.serviceOrder.medic+"\n \n \n \n \n \n---------------------------------------------------------",
+15,15)
+doc.save('text.pdf');
+ }
+//Submit information
   onSubmit(){
     console.log(this.serviceOrder, 'nice');
     this.getPdf();
     this.router.navigateByUrl('/end');
   }
 
-  getPdf(){
-    console.log(document.getElementById('pdfmain'));
-    var doc =new jsPDF();  
-    doc.text("Patient Information -----------------------------"+this.serviceOrder.id+"\nPatient name:"+this.pacient.name +"\nBirthday:"+
-    this.pacient.birthday+'\n'+"Gender: "+this.pacient.gender+"\n"+"Date of registration: "+ this.serviceOrder.date+"\nCity: "
-    +this.pacient.city+"\nAddress:"+this.pacient.address+"\n\n\nService Order Information: \nOrder ID: " +
-    this.serviceOrder.id + "\nOrder Date registration: "+this.serviceOrder.date +"\nInsurance company: "+this.serviceOrder.contract
-    +"\nLaboratory requested: "+this.serviceOrder.laboratory+"\n Assign medic: "+ this.serviceOrder.medic+"\n \n \n \n \n \n---------------------------------------------------------",
-  15,15)
-  doc.save('text.pdf');
-   }
+ 
 }

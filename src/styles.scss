@@ -1,11 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
+//css for the view
 
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
-// some basic resets 
+// Colors used in the view 
 $neutral:#B7B8B6;
-$blue-sky:#4CB5F5;
 $pine:#34675C;
-$fields:#b3c100;
 .container{
   display:flex;
   height: 100vh;
