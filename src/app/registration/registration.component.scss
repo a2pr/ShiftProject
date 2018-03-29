@@ -1,3 +1,8 @@
+$neutral:#B7B8B6;
+$blue-sky:#4CB5F5;
+$pine:#34675C;
+$fields:#b3c100;
+
 .full-width{
     width: 95%;
 }
@@ -8,6 +13,7 @@
 .form-size{
     width: 75%;
 }
+
 .customers {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
@@ -19,7 +25,7 @@
         border: 1px solid #ddd;
         padding: 8px;
     }
-    td:nth-child(even){background-color: #f2f2f2;}
+    td:nth-child(even){background-color: $neutral}
     tr:hover {background-color: #ddd;}
     th {
         padding-top: 12px;
@@ -35,3 +41,6 @@
     .title2{
         float: right;
     }
+mat-divider{
+    margin-bottom:10px; 
+}

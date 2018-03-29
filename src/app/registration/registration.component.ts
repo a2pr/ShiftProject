@@ -25,7 +25,7 @@ import {CityService} from  '../services/city.service';
 import { LaboratoryService } from '../services/laboratory.service';
 import { ExamService } from '../services/exam.service';
 import { ContractService } from '../services/contract.service';
-import {visibility,flyInOut, expand} from '../animations/app.animation';
+import {flyInOut, expand} from '../animations/app.animation';
 
 @Component({
   selector: 'app-registration',
@@ -36,7 +36,6 @@ import {visibility,flyInOut, expand} from '../animations/app.animation';
     'style':'display:block;'
   },
   animations: [
-   visibility(),
    flyInOut(), 
    expand()
   ]
@@ -56,7 +55,7 @@ export class RegistrationComponent implements OnInit {
   insurances:Contract[];
   visibilityServiceOrder='hidden';
   visibilityTable='hidden';
-
+  serviceOrderView=false;
   constructor(private fb:FormBuilder,
     private router:Router,
     private medicService:MedicService,
@@ -97,6 +96,7 @@ export class RegistrationComponent implements OnInit {
   }
   onPatientReady(){
     this.visibilityServiceOrder='shown';
+    this.serviceOrderView=true;
   }
   onSelectCity(val){
   this.laboratoryService.getLaboratory(this.orderServiceForm.get('cityFromLab').value)

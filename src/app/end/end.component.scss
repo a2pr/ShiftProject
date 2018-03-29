@@ -1,3 +1,7 @@
+$neutral:#B7B8B6;
+$blue-sky:#4CB5F5;
+$pine:#34675C;
+$fields:#b3c100;
 h1{
     text-align: center;
     margin:0px;
@@ -10,4 +14,8 @@ h3{
 p{
     margin:0px;
     text-align: center;
+}
+mat-card{
+    background-color: $pine;
+    color: white;
 }
