@@ -8,7 +8,7 @@ import { EventEmitter } from '@angular/core';
 //classes
 import {ServiceOrder} from '../shared/serviceOrder';
 import {ServiceOrderExam} from '../shared/serviceOrderExam';
-import {Pacient} from '../shared/pacient';
+import {Patient} from '../shared/patient';
 import {Medic} from '../shared/medic';
 import {City} from '../shared/city';
 import {Laboratory} from '../shared/laboratory';
@@ -45,7 +45,7 @@ export class RegistrationComponent implements OnInit {
   serviceOrder:ServiceOrder;
   serviceOrderExam:ServiceOrderExam;
   orderServiceForm:FormGroup;
-  pacient:Pacient;
+  patient:Patient;
   medics:Medic[];
   citys:City[];
   laboratorys:Laboratory[];
@@ -83,10 +83,10 @@ export class RegistrationComponent implements OnInit {
     this.orderServiceForm=this.fb.group({
       id:Math.floor((Math.random() * 100) + 1),
       date:new Date(),
-      pacient:['',Validators.required],
+      patient:['',Validators.required],
       birthday:['',Validators.required],
       gender:['',Validators.required],
-      cityFromPacient:['', Validators.required],
+      cityFromPatient:['', Validators.required],
       address:['',Validators.required],
       exam:['',Validators.required],
       insurance:['',Validators.required],
@@ -117,18 +117,18 @@ export class RegistrationComponent implements OnInit {
   }
 //Maps the provided information from the user, before submitting
 setPatient(val){
-  this.pacient={
-    name:this.orderServiceForm.get('pacient').value,
+  this.patient={
+    name:this.orderServiceForm.get('patient').value,
     birthday:this.orderServiceForm.get('birthday').value.toLocaleDateString(),
     gender:this.orderServiceForm.get('gender').value,
     address:this.orderServiceForm.get('address').value,
-    city:this.orderServiceForm.get('cityFromPacient').value
+    city:this.orderServiceForm.get('cityFromPatient').value
    
   };
   this.serviceOrder={
     id:this.orderServiceForm.get('id').value,
     date:this.orderServiceForm.get('date').value.toLocaleDateString(),
-    pacient:this.pacient,
+    patient:this.patient,
     contract:this.orderServiceForm.get('insurance').value,
     laboratory:this.orderServiceForm.get('lab').value,
     medic:this.orderServiceForm.get('medic').value
@@ -138,9 +138,9 @@ setPatient(val){
 getPdf(){
   console.log(document.getElementById('pdfmain'));
   var doc =new jsPDF();  
-  doc.text("Patient Information -----------------------------"+this.serviceOrder.id+"\nPatient name:"+this.pacient.name +"\nBirthday:"+
-  this.pacient.birthday+'\n'+"Gender: "+this.pacient.gender+"\n"+"Date of registration: "+ this.serviceOrder.date+"\nCity: "
-  +this.pacient.city+"\nAddress:"+this.pacient.address+"\n\n\nService Order Information: \nOrder ID: " +
+  doc.text("Patient Information -----------------------------"+this.serviceOrder.id+"\nPatient name:"+this.patient.name +"\nBirthday:"+
+  this.patient.birthday+'\n'+"Gender: "+this.patient.gender+"\n"+"Date of registration: "+ this.serviceOrder.date+"\nCity: "
+  +this.patient.city+"\nAddress:"+this.patient.address+"\n\n\nService Order Information: \nOrder ID: " +
   this.serviceOrder.id + "\nOrder Date registration: "+this.serviceOrder.date +"\nInsurance company: "+this.serviceOrder.contract
   +"\nLaboratory requested: "+this.serviceOrder.laboratory+"\n Assign medic: "+ this.serviceOrder.medic+"\n \n \n \n \n \n---------------------------------------------------------",
 15,15)

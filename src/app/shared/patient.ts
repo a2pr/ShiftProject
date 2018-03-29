@@ -1,5 +1,5 @@
 import {City} from './city';
-export class Pacient{
+export class Patient{
     name:string;
     birthday:Date;
     gender:String;
