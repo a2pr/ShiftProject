@@ -125,8 +125,6 @@ export class RegistrationComponent implements OnInit {
       this.medicService.getMedic(this.orderServiceForm.get('lab').value)
       .subscribe(medics=>this.medics=medics)
       break;
-      default:
-        break;
     }
   }
   //shows Service Order section

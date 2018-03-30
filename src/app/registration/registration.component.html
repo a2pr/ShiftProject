@@ -2,7 +2,7 @@
   <div fxFlex></div>
     <mat-card fxFlex fxFlexAlign="center" class="form-size">
       <mat-card-title>
-         <h2> Services Order</h2>
+         <h2> Services Order Registration</h2>
       </mat-card-title>
       <mat-card-content>
           <form [formGroup]='orderServiceForm' (ngSubmit)="onSubmit()" >
@@ -17,7 +17,7 @@
                           </mat-form-field>    
 
                           <mat-form-field class="half-width">
-                              <input matInput formControlName="birthday" [matDatepicker]="picker" placeholder="Choose a date" readonly>
+                              <input matInput formControlName="birthday" [matDatepicker]="picker" placeholder="Patient Birthday" readonly>
                               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                               <mat-datepicker touchUi="true" #picker ></mat-datepicker>
                               <mat-error [hidden]="!(orderServiceForm.get('birthday').hasError('required') 
@@ -68,7 +68,7 @@
                       <mat-option *ngFor="let exam of exams" [value]="exam.description">{{exam.description}} </mat-option>
                     </mat-select>
                     <mat-error [hidden]="!(orderServiceForm.get('exam').hasError('required') && orderServiceForm.get('exam').touched)">
-                            he exam apply for Patient is required
+                            The exam apply for the Patient is required
                     </mat-error>
                   </mat-form-field>
                   <!-- select insurance -->
@@ -78,7 +78,7 @@
                       <mat-option *ngFor="let insurance of insurances" [value]="insurance.description">{{insurance.description}} </mat-option>
                     </mat-select>
                     <mat-error [hidden]="!(orderServiceForm.get('insurance').hasError('required') && orderServiceForm.get('insurance').touched)">
-                        The insurance company of Patient is required
+                        The insurance company of the Patient is required
                     </mat-error>
                   </mat-form-field>
 
@@ -89,7 +89,7 @@
                     <mat-option *ngFor="let Uf of Ufs" [value]="Uf.description">{{Uf.description}} </mat-option>
                   </mat-select>
                   <mat-error [hidden]="!(orderServiceForm.get('cityFromLab').hasError('required') && orderServiceForm.get('cityFromLab').touched)">
-                        The city of the lab is required
+                        UF is required
                   </mat-error>
               </mat-form-field>
 
@@ -110,7 +110,7 @@
                         <mat-option *ngFor="let district of districts" [value]="district.description">{{district.description}} </mat-option>
                       </mat-select>
                       <mat-error [hidden]="!(orderServiceForm.get('cityFromLab').hasError('required') && orderServiceForm.get('cityFromLab').touched)">
-                            The city of the lab is required
+                            The district of the lab is required
                       </mat-error>
                   </mat-form-field>
                   
