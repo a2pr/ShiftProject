@@ -1,40 +1,25 @@
 import {City} from '../city';
+import {UFS} from './ufs';
 export const CITYS:City[]=[
     {
         description:'City 1',
-        UF:'RO'
+        UF:UFS[0].description
     },
     
     {
         description:'City 2',
-        UF:'RO'
+        UF:UFS[2].description
     },
     {
         description:'City 3',
-        UF:'RO'
+        UF:UFS[0].description
     },
     {
         description:'City 4',
-        UF:'AM'
+        UF:UFS[1].description
     },
     {
         description:'City 5',
-        UF:'AM'
-    },
-    {
-        description:'City 6',
-        UF:'AM'
-    },
-    {
-        description:'City 7',
-        UF:'SP'
-    },
-    {
-        description:'City 8',
-        UF:'SP'
-    },
-    {
-        description:'City 9',
-        UF:'SP'
+        UF:UFS[1].description
     }
 ]

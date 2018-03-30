@@ -18,8 +18,15 @@ export class LaboratoryService {
     return Observable.of(LABORATORYS).delay(1000);
   }
   //Laboratorys inside the city provided.
-  getLaboratory(city:string):Observable<Laboratory[]>{
+  getLaboratory(city:string, district:string,uf:string):Observable<Laboratory[]>{
     return Observable.of(LABORATORYS
-      .filter((laboratory)=>(laboratory.district.city.description===city)));
+      .filter((laboratory)=>(laboratory.district.city.description===city))
+      .filter((laboratory)=>(laboratory.district.description===district))
+      .filter((laboratory=>(laboratory.district.city.UF===uf)))
+    );
+  }
+  getLaboratoryByName(name:string):Observable<Laboratory[]>{
+    return Observable.of(LABORATORYS
+    .filter((laboratory)=>(laboratory.description===name))).delay(1000);
   }
 }

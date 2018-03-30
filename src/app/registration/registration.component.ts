@@ -16,6 +16,8 @@ import  * as jsPDF from 'jspdf';
 import {ExamPrice} from '../shared/examPrice';
 import { Exam } from '../shared/exam';
 import { Contract } from '../shared/contract';
+import { Uf } from '../shared/uf';
+import { District } from '../shared/district';
 //services
 import { MedicService } from '../services/medic.service';
 import {CityService} from  '../services/city.service';
@@ -53,6 +55,8 @@ export class RegistrationComponent implements OnInit {
   examPrice:ExamPrice;
   insurances:Contract[];
   serviceOrderView=false;
+  Ufs:Uf[];  
+  districts:District[];
 
   constructor(private fb:FormBuilder,
     private router:Router,
@@ -66,11 +70,10 @@ export class RegistrationComponent implements OnInit {
 
   ngOnInit() {
     //fetching data
-    this.cityService.getCitys()
-      .subscribe(citys=>this.citys=citys);
+   
 
-    this.laboratoryService.getLaboratorys()
-      .subscribe(laboratorys=>this.laboratorys=laboratorys);
+    // this.laboratoryService.getLaboratorys()
+    //   .subscribe(laboratorys=>this.laboratorys=laboratorys);
 
     this.examService.getExams()
       .subscribe(exams=>this.exams=exams);
@@ -92,28 +95,51 @@ export class RegistrationComponent implements OnInit {
       insurance:['',Validators.required],
       lab:['',Validators.required],
       cityFromLab:['',Validators.required],
-      medic:['',Validators.required]
+      medic:['',Validators.required],
+      uf:['',Validators.required],
+      district:['',Validators.required]
     });
+  }
+  onSelect(val){
+    switch (val) {
+      case "Uf":
+      //gets UF by select
+        this.cityService.getCitysByUf(this.orderServiceForm.get('uf').value)
+          .subscribe(citys=>this.citys=citys);
+        break;
+      case "City":
+      //gets District by selected City
+      this.cityService.getDistrictByCityAndUF(this.orderServiceForm.get('uf').value,
+      this.orderServiceForm.get('cityFromLab').value,
+      )
+        .subscribe(districts=>this.districts=districts);
+      break;
+      case "District":
+      //gets Laboratory by selected District
+      this.laboratoryService.getLaboratory(this.orderServiceForm.get('cityFromLab').value,
+      this.orderServiceForm.get('district').value, this.orderServiceForm.get('uf').value)
+        .subscribe(laboratorys=>this.laboratorys=laboratorys)
+      break;
+      case 'Lab':
+      //gets Medics by selected Lab
+      this.medicService.getMedic(this.orderServiceForm.get('lab').value)
+      .subscribe(medics=>this.medics=medics)
+      break;
+      default:
+        break;
+    }
   }
   //shows Service Order section
   onPatientReady(){
     this.serviceOrderView=true;
-  }
-  //gets Laboratory by selected city
-  onSelectCity(val){
-  this.laboratoryService.getLaboratory(this.orderServiceForm.get('cityFromLab').value)
-    .subscribe(laboratorys=>this.laboratorys=laboratorys)
-  }
-  //gets Medic by selected Lab
-  onSelectLab(val){
-  this.medicService.getMedic(this.orderServiceForm.get('lab').value)
-    .subscribe(medics=>this.medics=medics)
   }
 //gets selected exams price
   onSelectExam(val){
     this.examService.getExamsPrice(this.orderServiceForm.get('exam').value,
     this.orderServiceForm.get('insurance').value)
       .subscribe(examPrice=>{ this.examPrice=examPrice })
+      this.cityService.getUfs()
+      .subscribe(Ufs=>this.Ufs=Ufs);
   }
 //Maps the provided information from the user, before submitting
 setPatient(val){
@@ -125,6 +151,7 @@ setPatient(val){
     city:this.orderServiceForm.get('cityFromPatient').value
    
   };
+  
   this.serviceOrder={
     id:this.orderServiceForm.get('id').value,
     date:this.orderServiceForm.get('date').value.toLocaleDateString(),
@@ -142,7 +169,8 @@ getPdf(){
   this.patient.birthday+'\n'+"Gender: "+this.patient.gender+"\n"+"Date of registration: "+ this.serviceOrder.date+"\nCity: "
   +this.patient.city+"\nAddress:"+this.patient.address+"\n\n\nService Order Information: \nOrder ID: " +
   this.serviceOrder.id + "\nOrder Date registration: "+this.serviceOrder.date +"\nInsurance company: "+this.serviceOrder.contract
-  +"\nLaboratory requested: "+this.serviceOrder.laboratory+"\n Assign medic: "+ this.serviceOrder.medic+"\n \n \n \n \n \n---------------------------------------------------------",
+  +"\nLaboratory requested: "+this.serviceOrder.laboratory+"\nAssign medic: "+ this.serviceOrder.medic+
+  "\n \n \n \n \n \n---------------------------------------------------------",
 15,15)
 doc.save('text.pdf');
  }

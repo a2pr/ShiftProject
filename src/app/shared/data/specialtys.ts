@@ -11,11 +11,5 @@ export const SPECIALTIES:Specialty[]=[
     },
     {
         description:"Family Medicine"
-    },
-    {
-        description:"Geriatric Medicine"
-    },
-    {
-        description:"Internal Medicine"
     }
 ]
